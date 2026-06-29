@@ -1,0 +1,14 @@
+___pycache__/
+*.py[cod]
+
+venv/
+env/
+
+.env
+
+db.sqllite3
+
+staticfiles/
+
+
+vscode/

@@ -1,0 +1,38 @@
+{% extends "store/base.html" %}
+{% block title %}Contact Us - FreshCart{% endblock %}
+{% block content %}
+<div class="container section">
+  <div class="contact-grid">
+    <div class="contact-card">
+      <h2 style="margin-top:0;">Contact Us</h2>
+      <p style="color:var(--text-muted);">We'd love to hear from you! Reach out to us for any queries or support.</p>
+
+      <div class="contact-detail-row">
+        <span class="icon">📞</span>
+        <div>+91 98765 43210</div>
+      </div>
+      <div class="contact-detail-row">
+        <span class="icon">✉️</span>
+        <div>support@freshcart.com</div>
+      </div>
+      <div class="contact-detail-row">
+        <span class="icon">📍</span>
+        <div>123, Green Street, Healthy City, India - 560001</div>
+      </div>
+
+      <div class="map-placeholder">📍 Map preview</div>
+    </div>
+
+    <div class="contact-card">
+      <h3 style="margin-top:0;">Send us a Message</h3>
+      <form method="post">
+        {% csrf_token %}
+        {{ form.name }}
+        {{ form.email }}
+        {{ form.message }}
+        <button type="submit" class="btn btn-primary btn-block">Send Message</button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,80 @@
+{% extends "store/base.html" %}
+{% block title %}All Products - FreshCart{% endblock %}
+{% block content %}
+<div class="container section">
+  <div class="layout-with-sidebar">
+
+    <aside class="sidebar">
+      <h3>Categories</h3>
+      <ul>
+        <li><a href="{% url 'store:product_list' %}" class="{% if not active_category %}active{% endif %}">All Products</a></li>
+        {% for category in categories %}
+        <li><a href="{{ category.get_absolute_url }}" class="{% if active_category.id == category.id %}active{% endif %}">{{ category.name }}</a></li>
+        {% endfor %}
+      </ul>
+
+      <h3>Filter by Price</h3>
+      <form method="get" class="price-filter">
+        {% if active_category %}<input type="hidden" name="category" value="{{ active_category.slug }}">{% endif %}
+        {% if query %}<input type="hidden" name="q" value="{{ query }}">{% endif %}
+        <div class="price-range-labels"><span>₹0</span><span>₹500</span></div>
+        <input type="number" name="min_price" placeholder="Min ₹" value="{{ min_price }}" class="form-input" style="margin-bottom:8px;">
+        <input type="number" name="max_price" placeholder="Max ₹" value="{{ max_price }}" class="form-input">
+        <button type="submit" class="btn btn-primary btn-sm btn-block">Apply</button>
+      </form>
+    </aside>
+
+    <div>
+      <div class="toolbar">
+        <h2 style="margin:0; font-size:22px;">{% if active_category %}{{ active_category.name }}{% else %}All Products{% endif %}</h2>
+        <form method="get">
+          {% if active_category %}<input type="hidden" name="category" value="{{ active_category.slug }}">{% endif %}
+          <select name="sort" onchange="this.form.submit()" style="padding:8px; border:1px solid var(--border); border-radius:6px; font-size:13px;">
+            <option value="">Sort by: Featured</option>
+            <option value="price_asc">Price: Low to High</option>
+            <option value="price_desc">Price: High to Low</option>
+            <option value="name">Name: A-Z</option>
+          </select>
+        </form>
+      </div>
+
+      <div class="product-grid">
+        {% for product in products %}
+        <div class="product-card">
+          <a href="{{ product.get_absolute_url }}">
+            <div class="thumb">{{ product.emoji }}</div>
+            <h3>{{ product.name }}</h3>
+          </a>
+          <div class="price">₹{{ product.price }} <small>/{{ product.unit }}</small></div>
+          <form action="{% url 'store:cart_add' product.id %}" method="post" style="margin-top:auto">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ request.get_full_path }}">
+            <button type="submit" class="btn btn-primary btn-block btn-sm">Add to Cart</button>
+          </form>
+        </div>
+        {% empty %}
+        <p>No products found.</p>
+        {% endfor %}
+      </div>
+
+      {% if page_obj.paginator.num_pages > 1 %}
+      <div class="pagination">
+        {% if page_obj.has_previous %}
+        <a href="?{% if active_category %}category={{ active_category.slug }}&{% endif %}page={{ page_obj.previous_page_number }}">‹</a>
+        {% endif %}
+        {% for num in page_obj.paginator.page_range %}
+          {% if num == page_obj.number %}
+            <span class="current">{{ num }}</span>
+          {% else %}
+            <a href="?{% if active_category %}category={{ active_category.slug }}&{% endif %}page={{ num }}">{{ num }}</a>
+          {% endif %}
+        {% endfor %}
+        {% if page_obj.has_next %}
+        <a href="?{% if active_category %}category={{ active_category.slug }}&{% endif %}page={{ page_obj.next_page_number }}">›</a>
+        {% endif %}
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

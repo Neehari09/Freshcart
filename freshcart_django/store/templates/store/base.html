@@ -1,0 +1,87 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}FreshCart - Fresh Groceries Delivered{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'store/css/style.css' %}">
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="{% url 'store:home' %}" class="logo">
+        <span class="logo-badge">🛒</span> FreshCart
+      </a>
+      <nav class="main-nav">
+        <a href="{% url 'store:home' %}" class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}">Home</a>
+        <a href="{% url 'store:product_list' %}" class="{% if request.resolver_match.url_name == 'product_list' or request.resolver_match.url_name == 'product_detail' %}active{% endif %}">Products</a>
+        <a href="{% url 'store:product_list' %}">Categories</a>
+        <a href="{% url 'store:about' %}" class="{% if request.resolver_match.url_name == 'about' %}active{% endif %}">About Us</a>
+        <a href="{% url 'store:contact' %}" class="{% if request.resolver_match.url_name == 'contact' %}active{% endif %}">Contact</a>
+      </nav>
+      <div class="header-actions">
+        <form action="{% url 'store:product_list' %}" method="get" style="display:flex">
+          <input type="text" name="q" placeholder="Search products..." style="border:1px solid var(--border); border-radius:6px; padding:6px 10px; font-size:13px;">
+        </form>
+        <a href="{% url 'store:cart_detail' %}" class="cart-icon">
+          🛍️
+          {% if cart_item_count %}<span class="cart-badge">{{ cart_item_count }}</span>{% endif %}
+        </a>
+      </div>
+    </div>
+  </header>
+
+  {% if messages %}
+  <ul class="messages">
+    {% for message in messages %}
+      <li class="{{ message.tags }}">{{ message }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-logo">🛒 FreshCart</div>
+          <p style="font-size:13px; max-width:260px;">Your one-stop shop for all your daily needs. Fresh products, great prices!</p>
+        </div>
+        <div>
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="{% url 'store:home' %}">Home</a></li>
+            <li><a href="{% url 'store:product_list' %}">Products</a></li>
+            <li><a href="{% url 'store:product_list' %}">Categories</a></li>
+            <li><a href="{% url 'store:about' %}">About Us</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Customer Service</h4>
+          <ul>
+            <li><a href="{% url 'store:contact' %}">FAQs</a></li>
+            <li><a href="{% url 'store:contact' %}">Shipping Policy</a></li>
+            <li><a href="{% url 'store:contact' %}">Return Policy</a></li>
+            <li><a href="{% url 'store:contact' %}">Privacy Policy</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Newsletter</h4>
+          <p style="font-size:13px;">Subscribe to get updates on offers and new products</p>
+          <form class="footer-newsletter">
+            <input type="email" placeholder="Enter your email">
+            <button type="submit">Subscribe</button>
+          </form>
+        </div>
+      </div>
+      <div class="footer-bottom">&copy; {% now "Y" %} FreshCart. All Rights Reserved.</div>
+    </div>
+  </footer>
+
+</body>
+</html>

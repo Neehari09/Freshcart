@@ -1,0 +1,74 @@
+{% extends "store/base.html" %}
+{% block title %}FreshCart - Fresh Groceries Delivered to Your Doorstep{% endblock %}
+{% block content %}
+
+<section class="hero">
+  <div class="container hero-inner">
+    <div>
+      <h1>Fresh Groceries Delivered to Your Doorstep</h1>
+      <p>Get the best quality fresh vegetables, fruits, and daily essentials.</p>
+      <a href="{% url 'store:product_list' %}" class="btn btn-primary">Shop Now</a>
+    </div>
+    <div class="hero-emoji-cluster">🥦🍎🍇<br>🍅🥑🍊</div>
+  </div>
+</section>
+
+<div class="container">
+  <div class="feature-strip">
+    <div class="feature-item">
+      <span class="icon">🚚</span>
+      <div><strong>Free Delivery</strong><span>On orders above ₹499</span></div>
+    </div>
+    <div class="feature-item">
+      <span class="icon">✅</span>
+      <div><strong>Best Quality</strong><span>100% Fresh Products</span></div>
+    </div>
+    <div class="feature-item">
+      <span class="icon">↩️</span>
+      <div><strong>Easy Returns</strong><span>Return within 7 days</span></div>
+    </div>
+    <div class="feature-item">
+      <span class="icon">🔒</span>
+      <div><strong>Secure Payment</strong><span>100% Secure Payment</span></div>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="section-head"><h2>Popular Categories</h2></div>
+    <div class="category-grid">
+      {% for category in categories %}
+      <a href="{{ category.get_absolute_url }}" class="category-card">
+        <span class="emoji">{{ category.icon }}</span>
+        <span>{{ category.name }}</span>
+      </a>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <h2>Best Selling Products</h2>
+      <a href="{% url 'store:product_list' %}" class="view-all">View All →</a>
+    </div>
+    <div class="product-grid">
+      {% for product in featured_products %}
+      <div class="product-card">
+        <a href="{{ product.get_absolute_url }}">
+          <div class="thumb">{{ product.emoji }}</div>
+          <h3>{{ product.name }}</h3>
+        </a>
+        <div class="price">₹{{ product.price }} <small>/{{ product.unit }}</small></div>
+        <form action="{% url 'store:cart_add' product.id %}" method="post" style="margin-top:auto">
+          {% csrf_token %}
+          <input type="hidden" name="next" value="{% url 'store:home' %}">
+          <button type="submit" class="btn btn-primary btn-block btn-sm">Add to Cart</button>
+        </form>
+      </div>
+      {% empty %}
+      <p>No featured products yet. Run <code>python manage.py seed_data</code> to load sample products.</p>
+      {% endfor %}
+    </div>
+  </section>
+</div>
+
+{% endblock %}

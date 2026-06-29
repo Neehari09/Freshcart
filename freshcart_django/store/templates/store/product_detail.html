@@ -1,0 +1,80 @@
+{% extends "store/base.html" %}
+{% block title %}{{ product.name }} - FreshCart{% endblock %}
+{% block content %}
+<div class="container section">
+  <div class="product-detail">
+    <div>
+      <div class="detail-thumb-main">{{ product.emoji }}</div>
+      <div class="thumb-strip">
+        <div class="mini">{{ product.emoji }}</div>
+        {% for r in related_products|slice:":3" %}
+        <div class="mini">{{ r.emoji }}</div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="detail-info">
+      <h1>{{ product.name }}</h1>
+      <div class="price">₹{{ product.price }} /{{ product.unit }}</div>
+      <p class="desc">{{ product.description }}</p>
+      {% if product.in_stock %}
+      <span class="stock-badge">In Stock</span>
+      {% else %}
+      <span class="stock-badge" style="background:#fee2e2; color:#991b1b;">Out of Stock</span>
+      {% endif %}
+
+      <form action="{% url 'store:cart_add' product.id %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{{ request.get_full_path }}">
+        <label style="font-size:13px; color:var(--text-muted); display:block; margin-bottom:8px;">Quantity</label>
+        <div class="qty-control">
+          <button type="button" onclick="stepQty(-1)">−</button>
+          <input type="number" name="quantity" id="qtyInput" value="1" min="1">
+          <button type="button" onclick="stepQty(1)">+</button>
+        </div>
+        <div class="detail-actions">
+          <button type="submit" class="btn btn-primary">Add to Cart</button>
+          <button type="submit" name="buy_now" value="1" class="btn btn-outline">Buy Now</button>
+        </div>
+      </form>
+
+      <div class="mini-features">
+        <div class="feature-item"><span class="icon">🚚</span><div><strong style="font-size:13px;">Free Delivery</strong><br><span>On orders above ₹499</span></div></div>
+        <div class="feature-item"><span class="icon">✅</span><div><strong style="font-size:13px;">Best Quality</strong><br><span>100% Fresh</span></div></div>
+        <div class="feature-item"><span class="icon">↩️</span><div><strong style="font-size:13px;">Easy Returns</strong><br><span>Within 7 days</span></div></div>
+      </div>
+    </div>
+  </div>
+
+  {% if related_products %}
+  <section class="section">
+    <div class="section-head"><h2>You may also like</h2></div>
+    <div class="product-grid">
+      {% for r in related_products %}
+      <div class="product-card">
+        <a href="{{ r.get_absolute_url }}">
+          <div class="thumb">{{ r.emoji }}</div>
+          <h3>{{ r.name }}</h3>
+        </a>
+        <div class="price">₹{{ r.price }} <small>/{{ r.unit }}</small></div>
+        <form action="{% url 'store:cart_add' r.id %}" method="post" style="margin-top:auto">
+          {% csrf_token %}
+          <input type="hidden" name="next" value="{{ request.get_full_path }}">
+          <button type="submit" class="btn btn-primary btn-block btn-sm">Add to Cart</button>
+        </form>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+</div>
+
+<script>
+function stepQty(delta) {
+  const input = document.getElementById('qtyInput');
+  let val = parseInt(input.value || '1', 10) + delta;
+  if (val < 1) val = 1;
+  input.value = val;
+}
+</script>
+{% endblock %}
