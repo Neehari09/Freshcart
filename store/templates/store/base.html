@@ -22,13 +22,16 @@
         <a href="{% url 'store:contact' %}" class="{% if request.resolver_match.url_name == 'contact' %}active{% endif %}">Contact</a>
       </nav>
       <div class="header-actions">
-        <form action="{% url 'store:product_list' %}" method="get" style="display:flex">
+        <form action="{% url 'store:product_list' %}" method="get" class="search-form" style="display:flex">
           <input type="text" name="q" placeholder="Search products..." style="border:1px solid var(--border); border-radius:6px; padding:6px 10px; font-size:13px;">
         </form>
         <a href="{% url 'store:cart_detail' %}" class="cart-icon">
           🛍️
           {% if cart_item_count %}<span class="cart-badge">{{ cart_item_count }}</span>{% endif %}
         </a>
+        <button id="mobile-menu-toggle" class="mobile-menu-toggle" aria-label="Toggle menu">
+          ☰
+        </button>
       </div>
     </div>
   </header>
@@ -83,5 +86,17 @@
     </div>
   </footer>
 
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const menuToggle = document.getElementById('mobile-menu-toggle');
+      const mainNav = document.querySelector('.main-nav');
+      
+      if(menuToggle && mainNav) {
+        menuToggle.addEventListener('click', function() {
+          mainNav.classList.toggle('active');
+        });
+      }
+    });
+  </script>
 </body>
 </html>
