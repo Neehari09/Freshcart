@@ -1,0 +1,183 @@
+{% extends "store/base.html" %}
+{% load static %}
+{% load socialaccount %}
+{% block title %}Amazon Sign-In{% endblock %}
+{% block content %}
+
+<style>
+  .amz-login-container {
+    max-width: 350px;
+    margin: 30px auto;
+    font-family: Arial, sans-serif;
+  }
+
+  .amz-logo-container {
+    text-align: center;
+    margin-bottom: 15px;
+  }
+
+  .amz-logo-container .logo {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--text-dark);
+    text-decoration: none;
+  }
+
+  .amz-login-box {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 26px;
+    background: var(--bg-surface);
+  }
+
+  .amz-login-box h1 {
+    font-size: 28px;
+    font-weight: 400;
+    margin: 0 0 16px 0;
+    line-height: 1.2;
+  }
+
+  .amz-form-group {
+    margin-bottom: 14px;
+  }
+
+  .amz-form-group label {
+    display: block;
+    font-weight: 700;
+    font-size: 13px;
+    margin-bottom: 4px;
+  }
+
+  .amz-form-group input {
+    width: 100%;
+    padding: 7px 10px;
+    border: 1px solid #a6a6a6;
+    border-top-color: #949494;
+    border-radius: 3px;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5), 0 1px 0 rgba(0, 0, 0, 0.07) inset;
+    outline: none;
+    font-size: 14px;
+    background: var(--bg-surface);
+    color: var(--text-dark);
+  }
+
+  .amz-form-group input:focus {
+    border-color: #e77600;
+    box-shadow: 0 0 3px 2px rgba(228, 121, 17, 0.5);
+  }
+
+  .amz-btn {
+    width: 100%;
+    background: #f0c14b;
+    border: 1px solid;
+    border-color: #a88734 #9c7e31 #846a29;
+    border-radius: 8px;
+    color: #111;
+    cursor: pointer;
+    padding: 8px 10px;
+    font-size: 14px;
+    text-align: center;
+    margin-bottom: 14px;
+  }
+
+  .amz-btn:hover {
+    background: #f4d078;
+  }
+
+  .amz-legal {
+    font-size: 12px;
+    line-height: 1.5;
+    margin-bottom: 22px;
+  }
+
+  .amz-legal a {
+    color: #0066c0;
+  }
+
+  .amz-legal a:hover {
+    text-decoration: underline;
+    color: #c45500;
+  }
+
+  .amz-divider {
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+    line-height: 0.1em;
+    margin: 20px 0;
+    color: var(--text-muted);
+    font-size: 12px;
+  }
+
+  .amz-divider span {
+    background: var(--bg-color);
+    padding: 0 10px;
+  }
+
+  .amz-btn-secondary {
+    background: #e7e9ec;
+    border-color: #adb1b8 #a2a6ac #8d9096;
+  }
+
+  .amz-btn-secondary:hover {
+    background: #d9dce1;
+  }
+
+  [data-theme="dark"] .amz-form-group input {
+    background: #2a2a2a;
+    border-color: #555;
+  }
+</style>
+
+<div class="amz-login-container">
+  <div class="amz-logo-container">
+    <a href="{% url 'store:home' %}" class="logo">
+      <span class="logo-badge">🛒</span> FreshCart
+    </a>
+  </div>
+
+  <div class="amz-login-box">
+    <h1>Sign in</h1>
+    <form method="post">
+      {% csrf_token %}
+      {% if form.errors %}
+      <div style="color: #c40000; font-size: 13px; margin-bottom: 10px;">
+        <p><strong>There was a problem</strong><br>We cannot find an account with that email address, or the password
+          was incorrect.</p>
+      </div>
+      {% endif %}
+
+      <div class="amz-form-group">
+        <label for="id_username">Email or Mobile Number</label>
+        <input type="text" name="username" id="id_username" required autofocus>
+      </div>
+      <div class="amz-form-group">
+        <label for="id_password">Password</label>
+        <input type="password" name="password" id="id_password" required>
+      </div>
+      <button type="submit" class="amz-btn">Login</button>
+    </form>
+
+      <div style="text-align:center; margin: 15px 0; color: #767676; font-size: 12px;">or</div>
+
+      <!-- Replace your <a> tag with this: -->
+      <form action="{% provider_login_url 'google' %}" method="post" style="margin:0;">
+        {% csrf_token %}
+        <button type="submit" class="amz-btn amz-btn-secondary"
+          style="display:flex; align-items:center; justify-content:center; gap:8px; background:#fff; border-color:#d5d9d9; width:100%;">
+          <img src="https://www.google.com/favicon.ico" width="16" height="16" alt="Google">
+          Continue with Google
+        </button>
+      </form>
+
+
+
+      <div class="amz-legal" style="margin-top: 20px;">
+        By continuing, you agree to FreshCart's <a href="#">Conditions of Use</a> and <a href="#">Privacy Notice</a>.
+      </div>
+  </div>
+
+  <div class="amz-divider"><span>New to FreshCart?</span></div>
+  <a href="{% url 'store:signup' %}" class="amz-btn amz-btn-secondary"
+    style="display:block; text-decoration:none;">Create your FreshCart account</a>
+</div>
+{% endblock %}

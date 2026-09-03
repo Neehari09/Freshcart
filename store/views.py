@@ -4,10 +4,12 @@ from django.contrib import messages
 from django.core.paginator import Paginator
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_POST
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import UserCreationForm
 
 from .cart import Cart
 from .forms import ContactForm
-from .models import Category, Product
+from .models import Category, Product, Order, OrderItem
 
 
 def home(request):
@@ -123,6 +125,7 @@ def cart_remove(request, product_id):
     return redirect('store:cart_detail')
 
 
+@login_required
 def checkout(request):
     cart = Cart(request)
     if len(cart) == 0:
@@ -130,11 +133,35 @@ def checkout(request):
         return redirect('store:product_list')
 
     if request.method == 'POST':
+        order = Order.objects.create(
+            user=request.user,
+            total_price=cart.get_total_price(),
+            status='Pending'
+        )
+        for item in cart:
+            OrderItem.objects.create(
+                order=order,
+                product=item['product'],
+                price=item['price'],
+                quantity=item['quantity']
+            )
         cart.clear()
         messages.success(request, 'Your order has been placed successfully! Thank you for shopping with FreshCart.')
-        return redirect('store:home')
+        return redirect('store:my_orders')
 
     return render(request, 'store/checkout.html', {'cart': cart})
+
+
+@login_required
+def my_orders(request):
+    orders = Order.objects.filter(user=request.user)
+    return render(request, 'store/my_orders.html', {'orders': orders})
+
+
+@login_required
+def order_detail(request, order_id):
+    order = get_object_or_404(Order, id=order_id, user=request.user)
+    return render(request, 'store/order_detail.html', {'order': order})
 
 
 def about(request):
@@ -151,3 +178,14 @@ def contact(request):
     else:
         form = ContactForm()
     return render(request, 'store/contact.html', {'form': form})
+
+def signup(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Your account successfully created')
+            return redirect('store:login')
+    else:
+        form = UserCreationForm()
+    return render(request, 'store/signup.html', {'form': form})

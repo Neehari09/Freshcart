@@ -1,0 +1,47 @@
+{% extends "store/base.html" %}
+{% load static %}
+{% block title %}My Orders - FreshCart{% endblock %}
+
+{% block content %}
+<div class="container" style="padding: 40px 20px; max-width: 900px; margin: 0 auto;">
+  <h1 style="margin-bottom: 24px;">My Orders</h1>
+
+  {% if orders %}
+    <div style="display: grid; gap: 20px;">
+      {% for order in orders %}
+        <div style="border: 1px solid var(--border); border-radius: 8px; padding: 20px; background: var(--bg-surface);">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid var(--border);">
+            <div>
+              <strong style="font-size: 14px; color: var(--text-muted); text-transform: uppercase;">Order Placed</strong><br>
+              <span style="font-size: 16px;">{{ order.created_at|date:"F j, Y" }}</span>
+            </div>
+            <div>
+              <strong style="font-size: 14px; color: var(--text-muted); text-transform: uppercase;">Total</strong><br>
+              <span style="font-size: 16px;">₹{{ order.total_price }}</span>
+            </div>
+            <div>
+              <strong style="font-size: 14px; color: var(--text-muted); text-transform: uppercase;">Status</strong><br>
+              <span style="font-size: 16px; font-weight: 700; color: var(--green-dark);">{{ order.status }}</span>
+            </div>
+            <div>
+              <strong style="font-size: 14px; color: var(--text-muted); text-transform: uppercase;">Order #</strong><br>
+              <span style="font-size: 16px;">{{ order.id }}</span>
+            </div>
+          </div>
+          
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <p style="margin: 0;">Contains {{ order.items.count }} item{{ order.items.count|pluralize }}</p>
+            <a href="{% url 'store:order_detail' order.id %}" style="background: var(--green-dark); color: #fff; padding: 8px 16px; border-radius: 4px; text-decoration: none; font-weight: 600;">View Details</a>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div style="text-align: center; padding: 40px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-surface);">
+      <h2>No orders yet!</h2>
+      <p>Looks like you haven't placed any orders with us.</p>
+      <a href="{% url 'store:home' %}" class="amz-btn" style="display: inline-block; width: auto; padding: 10px 20px; text-decoration: none; margin-top: 15px;">Start Shopping</a>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

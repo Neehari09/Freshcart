@@ -1,0 +1,154 @@
+{% extends "store/base.html" %}
+{% load static %}
+{% block title %}Amazon Registration{% endblock %}
+
+{% block content %}
+<style>
+  .amz-login-container {
+    max-width: 350px;
+    margin: 30px auto;
+    font-family: Arial, sans-serif;
+  }
+
+  .amz-logo-container {
+    text-align: center;
+    margin-bottom: 15px;
+  }
+
+  .amz-logo-container .logo {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--text-dark);
+    text-decoration: none;
+  }
+
+  .amz-login-box {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 26px;
+    background: var(--bg-surface);
+  }
+
+  .amz-login-box h1 {
+    font-size: 28px;
+    font-weight: 400;
+    margin: 0 0 16px 0;
+    line-height: 1.2;
+  }
+
+  .amz-form-group {
+    margin-bottom: 14px;
+  }
+
+  .amz-form-group label {
+    display: block;
+    font-weight: 700;
+    font-size: 13px;
+    margin-bottom: 4px;
+  }
+
+  .amz-form-group input {
+    width: 100%;
+    padding: 7px 10px;
+    border: 1px solid #a6a6a6;
+    border-top-color: #949494;
+    border-radius: 3px;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5), 0 1px 0 rgba(0, 0, 0, 0.07) inset;
+    outline: none;
+    font-size: 14px;
+    background: var(--bg-surface);
+    color: var(--text-dark);
+  }
+
+  .amz-form-group input:focus {
+    border-color: #e77600;
+    box-shadow: 0 0 3px 2px rgba(228, 121, 17, 0.5);
+  }
+
+  .amz-btn {
+    width: 100%;
+    background: #f0c14b;
+    border: 1px solid;
+    border-color: #a88734 #9c7e31 #846a29;
+    border-radius: 8px;
+    color: #111;
+    cursor: pointer;
+    padding: 8px 10px;
+    font-size: 14px;
+    text-align: center;
+    margin-bottom: 14px;
+  }
+
+  .amz-btn:hover {
+    background: #f4d078;
+  }
+
+  .amz-legal {
+    font-size: 12px;
+    line-height: 1.5;
+    margin-bottom: 22px;
+  }
+
+  .amz-legal a {
+    color: #0066c0;
+  }
+
+  .amz-legal a:hover {
+    text-decoration: underline;
+    color: #c45500;
+  }
+
+  [data-theme="dark"] .amz-form-group input {
+    background: #2a2a2a;
+    border-color: #555;
+  }
+</style>
+
+<div class="amz-login-container">
+  <div class="amz-logo-container">
+    <a href="{% url 'store:home' %}" class="logo">
+      <span class="logo-badge">🛒</span> FreshCart
+    </a>
+  </div>
+
+  <div class="amz-login-box">
+    <h1>Create account</h1>
+    <form method="post">
+      {% csrf_token %}
+      {% if form.errors %}
+      <div style="color: #c40000; font-size: 13px; margin-bottom: 10px;">
+        <p><strong>There was a problem</strong></p>
+        {{ form.non_field_errors }}
+        {% for field in form %}
+        {% for error in field.errors %}
+        <p>{{ error }}</p>
+        {% endfor %}
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      <div class="amz-form-group">
+        <label for="id_username">Email or Mobile Number</label>
+        <input type="text" name="username" id="id_username" required autofocus>
+      </div>
+      <div class="amz-form-group">
+        <label for="id_password1">Password</label>
+        <input type="password" name="password1" id="id_password1" placeholder="At least 6 characters" required>
+      </div>
+      <div class="amz-form-group">
+        <label for="id_password2">Confirm Password</label>
+        <input type="password" name="password2" id="id_password2" required>
+      </div>
+      <button type="submit" class="amz-btn">Create account</button>
+      <div class="amz-legal" style="margin-top: 20px;">
+        By creating an account, you agree to FreshCart's <a href="#">Conditions of Use</a> and <a href="#">Privacy
+          Notice</a>.
+      </div>
+      <div style="margin-top: 20px; font-size: 13px;">
+        Already have an account? <a href="{% url 'store:login' %}" style="color: #0066c0; text-decoration: none;">Sign
+          in </a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

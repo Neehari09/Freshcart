@@ -6,7 +6,7 @@ env/
 
 .env
 
-db.sqllite3
+db.sqlite3
 
 staticfiles/
 

@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{% block title %}FreshCart - Fresh Groceries Delivered{% endblock %}</title>
-  <link rel="stylesheet" href="{% static 'store/css/style.css' %}">
+  <link rel="stylesheet" href="{% static 'store/css/style.css' %}?v=1">
 </head>
 <body>
 
@@ -17,18 +17,33 @@
       <nav class="main-nav">
         <a href="{% url 'store:home' %}" class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}">Home</a>
         <a href="{% url 'store:product_list' %}" class="{% if request.resolver_match.url_name == 'product_list' or request.resolver_match.url_name == 'product_detail' %}active{% endif %}">Products</a>
-        <a href="{% url 'store:product_list' %}">Categories</a>
         <a href="{% url 'store:about' %}" class="{% if request.resolver_match.url_name == 'about' %}active{% endif %}">About Us</a>
+        <a href="{% url 'store:my_orders' %}">My Orders</a>
         <a href="{% url 'store:contact' %}" class="{% if request.resolver_match.url_name == 'contact' %}active{% endif %}">Contact</a>
       </nav>
       <div class="header-actions">
         <form action="{% url 'store:product_list' %}" method="get" class="search-form" style="display:flex">
           <input type="text" name="q" placeholder="Search products..." style="border:1px solid var(--border); border-radius:6px; padding:6px 10px; font-size:13px;">
         </form>
+        <div style="display:flex; flex-direction:column; align-items:flex-start; font-size:13px; line-height:1.2; margin-right:15px;">
+          {% if user.is_authenticated %}
+            <span style="color:var(--text-dark);">Hello, {{ user.username }}</span>
+            <form method="post" action="{% url 'store:logout' %}" style="margin:0;">
+              {% csrf_token %}
+              <button type="submit" style="background:none; border:none; padding:0; font-weight:700; color:var(--text-dark); cursor:pointer;">Sign out</button>
+            </form>
+          {% else %}
+            <span style="color:var(--text-dark);">Hello, sign in</span>
+            <a href="{% url 'store:login' %}" style="font-weight:700; color:var(--text-dark);">Account & Lists</a>
+          {% endif %}
+        </div>
         <a href="{% url 'store:cart_detail' %}" class="cart-icon">
           🛍️
           {% if cart_item_count %}<span class="cart-badge">{{ cart_item_count }}</span>{% endif %}
         </a>
+        <button id="theme-toggle" style="background:none; border:none; font-size:20px; cursor:pointer;" aria-label="Toggle Dark Mode" title="Toggle Dark Mode">
+          🌓
+        </button>
         <button id="mobile-menu-toggle" class="mobile-menu-toggle" aria-label="Toggle menu">
           ☰
         </button>
@@ -60,7 +75,7 @@
           <ul>
             <li><a href="{% url 'store:home' %}">Home</a></li>
             <li><a href="{% url 'store:product_list' %}">Products</a></li>
-            <li><a href="{% url 'store:product_list' %}">Categories</a></li>
+            <li><a href="{% url 'store:my_orders' %}">My Orders</a></li>
             <li><a href="{% url 'store:about' %}">About Us</a></li>
           </ul>
         </div>
@@ -98,5 +113,6 @@
       }
     });
   </script>
+  <script src="{% static 'store/js/main.js' %}?v=1"></script>
 </body>
 </html>
