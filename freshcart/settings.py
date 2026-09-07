@@ -136,3 +136,7 @@ ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
 LOGIN_REDIRECT_URL = '/'
+
+# Razorpay Settings
+RAZORPAY_KEY_ID = 'rzp_test_TYjQG27oV1UWm2'
+RAZORPAY_KEY_SECRET = 'Dsx0RPdNUWtnqvqJc3doUlbC' # Please replace this with your actual Key Secret!

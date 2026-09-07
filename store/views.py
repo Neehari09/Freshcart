@@ -6,12 +6,15 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import login
 
 from .cart import Cart
 from .forms import ContactForm
 from .models import Category, Product, Order, OrderItem
-
-
+import razorpay
+from django.conf import settings
+from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponseBadRequest
 def home(request):
     categories = Category.objects.all()
     featured_products = Product.objects.filter(is_featured=True).select_related('category')[:5]
@@ -132,24 +135,94 @@ def checkout(request):
         messages.warning(request, 'Your cart is empty. Add some products first!')
         return redirect('store:product_list')
 
-    if request.method == 'POST':
-        order = Order.objects.create(
-            user=request.user,
-            total_price=cart.get_total_price(),
-            status='Pending'
-        )
-        for item in cart:
-            OrderItem.objects.create(
-                order=order,
-                product=item['product'],
-                price=item['price'],
-                quantity=item['quantity']
-            )
-        cart.clear()
-        messages.success(request, 'Your order has been placed successfully! Thank you for shopping with FreshCart.')
-        return redirect('store:my_orders')
+    total_price = cart.get_total_price()
+    
+    # Initialize Razorpay Client
+    client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
+    
+    # Create order in Razorpay (Amount in paise)
+    razorpay_amount = int(total_price * 100)
+    payment_data = {
+        "amount": razorpay_amount,
+        "currency": "INR",
+        "payment_capture": "1"
+    }
+    
+    razorpay_order = client.order.create(data=payment_data)
+    razorpay_order_id = razorpay_order['id']
 
-    return render(request, 'store/checkout.html', {'cart': cart})
+    # We will create the Order in the DB here as 'Pending'
+    order = Order.objects.create(
+        user=request.user,
+        total_price=total_price,
+        status='Pending',
+        razorpay_order_id=razorpay_order_id
+    )
+    for item in cart:
+        OrderItem.objects.create(
+            order=order,
+            product=item['product'],
+            price=item['price'],
+            quantity=item['quantity']
+        )
+        
+    context = {
+        'cart': cart,
+        'razorpay_order_id': razorpay_order_id,
+        'razorpay_merchant_key': settings.RAZORPAY_KEY_ID,
+        'razorpay_amount': razorpay_amount,
+        'currency': "INR",
+        'callback_url': "http://" + request.get_host() + "/payment-callback/",
+    }
+    return render(request, 'store/checkout.html', context)
+
+
+@csrf_exempt
+def payment_callback(request):
+    if request.method == "POST":
+        payment_id = request.POST.get('razorpay_payment_id', '')
+        provider_order_id = request.POST.get('razorpay_order_id', '')
+        signature_id = request.POST.get('razorpay_signature', '')
+
+        try:
+            order = Order.objects.get(razorpay_order_id=provider_order_id)
+        except Order.DoesNotExist:
+            return HttpResponseBadRequest("Order not found")
+
+        client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
+
+        # Verify Signature
+        try:
+            client.utility.verify_payment_signature({
+                'razorpay_order_id': provider_order_id,
+                'razorpay_payment_id': payment_id,
+                'razorpay_signature': signature_id
+            })
+            
+            # If successful, mark order as Processing/Completed
+            order.razorpay_payment_id = payment_id
+            order.razorpay_signature = signature_id
+            order.status = 'Processing'
+            order.save()
+            
+            # Since the cross-site POST drops the session cookie, we manually log the user back in
+            # using the user associated with the verified order
+            login(request, order.user, backend='django.contrib.auth.backends.ModelBackend')
+            
+            # Clear the session cart
+            cart = Cart(request)
+            cart.clear()
+            
+            messages.success(request, 'Your payment was successful and your order has been placed!')
+            return redirect('store:my_orders')
+
+        except razorpay.errors.SignatureVerificationError:
+            order.status = 'Cancelled'
+            order.save()
+            messages.error(request, 'Payment failed or signature mismatch.')
+            return redirect('store:checkout')
+            
+    return HttpResponseBadRequest("Invalid request")
 
 
 @login_required
