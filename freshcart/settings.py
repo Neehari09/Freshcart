@@ -1,17 +1,20 @@
 """
 Django settings for the freshcart project.
 """
+import os
 from pathlib import Path
+from dotenv import load_dotenv
+
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+load_dotenv(BASE_DIR /'.env')
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-freshcart-demo-key-change-this-in-production'
-
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-freshcart-demo-key-change-this-in-production')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
 ALLOWED_HOSTS = [
+    ".vercel.app",
     "freshcart-bz9j.onrender.com",
     "localhost",
     "127.0.0.1",
@@ -89,12 +92,15 @@ USE_I18N = True
 USE_TZ = True
 
 # Static files (CSS, JavaScript)
-STATIC_URL = 'static/'
-STATICFILES_DIRS = [BASE_DIR / 'store' / 'static']
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    BASE_DIR / 'store' / 'static'
+]
+
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # Media files (product photos uploaded via admin)
-MEDIA_URL = 'media/'
+MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
@@ -138,5 +144,5 @@ ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
 LOGIN_REDIRECT_URL = '/'
 
 # Razorpay Settings
-RAZORPAY_KEY_ID = 'rzp_test_TYjQG27oV1UWm2'
-RAZORPAY_KEY_SECRET = 'Dsx0RPdNUWtnqvqJc3doUlbC' # Please replace this with your actual Key Secret!
+RAZORPAY_KEY_ID = os.environ.get('RAZORPAY_KEY_ID', 'rzp_test_TYjQG27oV1UWm2')
+RAZORPAY_KEY_SECRET = os.environ.get('RAZORPAY_KEY_SECRET', 'Dsx0RPdNUWtnqvqJc3doUlbC') # Please replace this with your actual Key Secret!
