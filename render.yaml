@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: freshcart
+    env: python
+    buildCommand: ./build_files.sh
+    startCommand: gunicorn freshcart.wsgi:application
