@@ -1,0 +1,385 @@
+[
+{
+  "model": "store.category",
+  "pk": 1,
+  "fields": {
+    "name": "Fruits",
+    "slug": "fruits",
+    "icon": "🍎",
+    "order": 1
+  }
+},
+{
+  "model": "store.category",
+  "pk": 2,
+  "fields": {
+    "name": "Vegetables",
+    "slug": "vegetables",
+    "icon": "🥦",
+    "order": 2
+  }
+},
+{
+  "model": "store.category",
+  "pk": 3,
+  "fields": {
+    "name": "Dairy",
+    "slug": "dairy",
+    "icon": "🥛",
+    "order": 3
+  }
+},
+{
+  "model": "store.category",
+  "pk": 4,
+  "fields": {
+    "name": "Beverages",
+    "slug": "beverages",
+    "icon": "🧃",
+    "order": 4
+  }
+},
+{
+  "model": "store.category",
+  "pk": 5,
+  "fields": {
+    "name": "Snacks",
+    "slug": "snacks",
+    "icon": "🍪",
+    "order": 5
+  }
+},
+{
+  "model": "store.category",
+  "pk": 6,
+  "fields": {
+    "name": "Personal Care",
+    "slug": "personal-care",
+    "icon": "🧴",
+    "order": 6
+  }
+},
+{
+  "model": "store.product",
+  "pk": 1,
+  "fields": {
+    "category": 1,
+    "name": "Apple",
+    "slug": "apple",
+    "emoji": "🍎",
+    "image": "",
+    "price": "120.00",
+    "unit": "kg",
+    "description": "Fresh and natural apples. Rich in nutrients and goodness. Perfect for a healthy diet.",
+    "stock": 100,
+    "is_featured": true,
+    "created_at": "2026-06-23T06:42:50.928Z"
+  }
+},
+{
+  "model": "store.product",
+  "pk": 2,
+  "fields": {
+    "category": 1,
+    "name": "Banana",
+    "slug": "banana",
+    "emoji": "🍌",
+    "image": "",
+    "price": "60.00",
+    "unit": "dozen",
+    "description": "Sweet, ripe bananas packed with potassium and natural energy.",
+    "stock": 100,
+    "is_featured": true,
+    "created_at": "2026-06-23T06:42:50.941Z"
+  }
+},
+{
+  "model": "store.product",
+  "pk": 3,
+  "fields": {
+    "category": 1,
+    "name": "Orange",
+    "slug": "orange",
+    "emoji": "🍊",
+    "image": "",
+    "price": "90.00",
+    "unit": "kg",
+    "description": "Juicy oranges loaded with vitamin C.",
+    "stock": 100,
+    "is_featured": false,
+    "created_at": "2026-06-23T06:42:50.954Z"
+  }
+},
+{
+  "model": "store.product",
+  "pk": 4,
+  "fields": {
+    "category": 1,
+    "name": "Grapes",
+    "slug": "grapes",
+    "emoji": "🍇",
+    "image": "",
+    "price": "110.00",
+    "unit": "kg",
+    "description": "Seedless green grapes, fresh and crisp.",
+    "stock": 100,
+    "is_featured": false,
+    "created_at": "2026-06-23T06:42:50.965Z"
+  }
+},
+{
+  "model": "store.product",
+  "pk": 5,
+  "fields": {
+    "category": 2,
+    "name": "Tomato",
+    "slug": "tomato",
+    "emoji": "🍅",
+    "image": "",
+    "price": "40.00",
+    "unit": "kg",
+    "description": "Farm-fresh, ripe red tomatoes ideal for cooking and salads.",
+    "stock": 100,
+    "is_featured": true,
+    "created_at": "2026-06-23T06:42:50.977Z"
+  }
+},
+{
+  "model": "store.product",
+  "pk": 6,
+  "fields": {
+    "category": 2,
+    "name": "Potato",
+    "slug": "potato",
+    "emoji": "🥔",
+    "image": "",
+    "price": "30.00",
+    "unit": "kg",
+    "description": "Versatile, fresh potatoes for everyday cooking.",
+    "stock": 100,
+    "is_featured": true,
+    "created_at": "2026-06-23T06:42:50.986Z"
+  }
+},
+{
+  "model": "store.product",
+  "pk": 7,
+  "fields": {
+    "category": 2,
+    "name": "Onion",
+    "slug": "onion",
+    "emoji": "🧅",
+    "image": "",
+    "price": "25.00",
+    "unit": "kg",
+    "description": "Fresh onions, a kitchen essential.",
+    "stock": 100,
+    "is_featured": false,
+    "created_at": "2026-06-23T06:42:50.997Z"
+  }
+},
+{
+  "model": "store.product",
+  "pk": 8,
+  "fields": {
+    "category": 2,
+    "name": "Broccoli",
+    "slug": "broccoli",
+    "emoji": "🥦",
+    "image": "",
+    "price": "80.00",
+    "unit": "kg",
+    "description": "Crisp, nutrient-rich broccoli florets.",
+    "stock": 100,
+    "is_featured": false,
+    "created_at": "2026-06-23T06:42:51.008Z"
+  }
+},
+{
+  "model": "store.product",
+  "pk": 9,
+  "fields": {
+    "category": 3,
+    "name": "Milk",
+    "slug": "milk",
+    "emoji": "🥛",
+    "image": "",
+    "price": "60.00",
+    "unit": "ltr",
+    "description": "Pure, pasteurized full-cream milk delivered fresh.",
+    "stock": 100,
+    "is_featured": true,
+    "created_at": "2026-06-23T06:42:51.019Z"
+  }
+},
+{
+  "model": "store.product",
+  "pk": 10,
+  "fields": {
+    "category": 3,
+    "name": "Cheese",
+    "slug": "cheese",
+    "emoji": "🧀",
+    "image": "",
+    "price": "150.00",
+    "unit": "pack",
+    "description": "Creamy, delicious cheese block.",
+    "stock": 100,
+    "is_featured": false,
+    "created_at": "2026-06-23T06:42:51.029Z"
+  }
+},
+{
+  "model": "store.product",
+  "pk": 11,
+  "fields": {
+    "category": 3,
+    "name": "Butter",
+    "slug": "butter",
+    "emoji": "🧈",
+    "image": "",
+    "price": "95.00",
+    "unit": "pack",
+    "description": "Rich and creamy table butter.",
+    "stock": 100,
+    "is_featured": false,
+    "created_at": "2026-06-23T06:42:51.037Z"
+  }
+},
+{
+  "model": "store.product",
+  "pk": 12,
+  "fields": {
+    "category": 3,
+    "name": "Rice",
+    "slug": "rice",
+    "emoji": "🍚",
+    "image": "",
+    "price": "80.00",
+    "unit": "kg",
+    "description": "Premium long-grain rice.",
+    "stock": 100,
+    "is_featured": false,
+    "created_at": "2026-06-23T06:42:51.048Z"
+  }
+},
+{
+  "model": "store.product",
+  "pk": 13,
+  "fields": {
+    "category": 4,
+    "name": "Cooking Oil",
+    "slug": "cooking-oil",
+    "emoji": "🛢️",
+    "image": "",
+    "price": "180.00",
+    "unit": "ltr",
+    "description": "Refined cooking oil, light and healthy.",
+    "stock": 100,
+    "is_featured": false,
+    "created_at": "2026-06-23T06:42:51.068Z"
+  }
+},
+{
+  "model": "store.product",
+  "pk": 14,
+  "fields": {
+    "category": 4,
+    "name": "Orange Juice",
+    "slug": "orange-juice",
+    "emoji": "🧃",
+    "image": "",
+    "price": "70.00",
+    "unit": "ltr",
+    "description": "Freshly squeezed orange juice, no added sugar.",
+    "stock": 100,
+    "is_featured": false,
+    "created_at": "2026-06-23T06:42:51.092Z"
+  }
+},
+{
+  "model": "store.product",
+  "pk": 15,
+  "fields": {
+    "category": 4,
+    "name": "Mineral Water",
+    "slug": "mineral-water",
+    "emoji": "💧",
+    "image": "",
+    "price": "20.00",
+    "unit": "ltr",
+    "description": "Clean, safe packaged drinking water.",
+    "stock": 100,
+    "is_featured": false,
+    "created_at": "2026-06-23T06:42:51.104Z"
+  }
+},
+{
+  "model": "store.product",
+  "pk": 16,
+  "fields": {
+    "category": 5,
+    "name": "Potato Chips",
+    "slug": "potato-chips",
+    "emoji": "🥔",
+    "image": "",
+    "price": "30.00",
+    "unit": "pack",
+    "description": "Crispy, crunchy potato chips, lightly salted.",
+    "stock": 100,
+    "is_featured": false,
+    "created_at": "2026-06-23T06:42:51.115Z"
+  }
+},
+{
+  "model": "store.product",
+  "pk": 17,
+  "fields": {
+    "category": 5,
+    "name": "Cookies",
+    "slug": "cookies",
+    "emoji": "🍪",
+    "image": "",
+    "price": "50.00",
+    "unit": "pack",
+    "description": "Crunchy butter cookies, great with tea.",
+    "stock": 100,
+    "is_featured": false,
+    "created_at": "2026-06-23T06:42:51.126Z"
+  }
+},
+{
+  "model": "store.product",
+  "pk": 18,
+  "fields": {
+    "category": 6,
+    "name": "Hand Wash",
+    "slug": "hand-wash",
+    "emoji": "🧼",
+    "image": "",
+    "price": "90.00",
+    "unit": "pc",
+    "description": "Gentle, moisturizing hand wash.",
+    "stock": 100,
+    "is_featured": false,
+    "created_at": "2026-06-23T06:42:51.135Z"
+  }
+},
+{
+  "model": "store.product",
+  "pk": 19,
+  "fields": {
+    "category": 6,
+    "name": "Shampoo",
+    "slug": "shampoo",
+    "emoji": "🧴",
+    "image": "",
+    "price": "140.00",
+    "unit": "pc",
+    "description": "Nourishing shampoo for everyday use.",
+    "stock": 100,
+    "is_featured": false,
+    "created_at": "2026-06-23T06:42:51.145Z"
+  }
+}
+]
