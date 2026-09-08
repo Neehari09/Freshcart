@@ -15,7 +15,17 @@ import razorpay
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponseBadRequest
+
+def ensure_products_exist():
+    if not Product.objects.exists():
+        from django.core.management import call_command
+        try:
+            call_command('loaddata', 'store_fixture.json')
+        except Exception:
+            pass
+
 def home(request):
+    ensure_products_exist()
     categories = Category.objects.all()
     featured_products = Product.objects.filter(is_featured=True).select_related('category')[:5]
     context = {
@@ -26,6 +36,7 @@ def home(request):
 
 
 def product_list(request):
+    ensure_products_exist()
     categories = Category.objects.all()
     products = Product.objects.select_related('category').all()
 
