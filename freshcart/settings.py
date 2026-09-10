@@ -109,6 +109,9 @@ LOGIN_URL = 'store:login'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
+# HTTPS proxy configuration for Render
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
 # Currency / store settings
 STORE_CURRENCY_SYMBOL = '₹'
 CART_SESSION_ID = 'cart'
@@ -123,9 +126,16 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
+GOOGLE_CLIENT_ID = os.environ.get('GOOGLE_CLIENT_ID', '')
+GOOGLE_CLIENT_SECRET = os.environ.get('GOOGLE_CLIENT_SECRET', '')
 
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
+        'APP': {
+            'client_id': GOOGLE_CLIENT_ID,
+            'secret': GOOGLE_CLIENT_SECRET,
+            'key': '',
+        },
         'SCOPE': [
             'profile',
             'email',
@@ -136,11 +146,10 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 
-# Allauth auto-signup settings
+# Allauth settings
 SOCIALACCOUNT_AUTO_SIGNUP = True
-ACCOUNT_USERNAME_REQUIRED = False
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+SOCIALACCOUNT_EMAIL_VERIFICATION = 'none'
 LOGIN_REDIRECT_URL = '/'
 
 # Razorpay Settings

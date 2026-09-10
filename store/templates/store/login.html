@@ -154,13 +154,15 @@
         <label for="id_password">Password</label>
         <input type="password" name="password" id="id_password" required>
       </div>
+      {% if next %}
+      <input type="hidden" name="next" value="{{ next }}">
+      {% endif %}
       <button type="submit" class="amz-btn">Login</button>
     </form>
 
       <div style="text-align:center; margin: 15px 0; color: #767676; font-size: 12px;">or</div>
 
-      <!-- Replace your <a> tag with this: -->
-      <form action="{% provider_login_url 'google' %}" method="post" style="margin:0;">
+      <form action="{% provider_login_url 'google' next=request.GET.next %}" method="post" style="margin:0;">
         {% csrf_token %}
         <button type="submit" class="amz-btn amz-btn-secondary"
           style="display:flex; align-items:center; justify-content:center; gap:8px; background:#fff; border-color:#d5d9d9; width:100%;">

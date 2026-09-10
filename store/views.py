@@ -14,7 +14,7 @@ from .models import Category, Product, Order, OrderItem
 import razorpay
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
-from django.http import HttpResponseBadRequest
+from django.urls import reverse
 
 def ensure_products_exist():
     if not Product.objects.exists():
@@ -183,7 +183,7 @@ def checkout(request):
         'razorpay_merchant_key': settings.RAZORPAY_KEY_ID,
         'razorpay_amount': razorpay_amount,
         'currency': "INR",
-        'callback_url': "http://" + request.get_host() + "/payment-callback/",
+        'callback_url': request.build_absolute_uri(reverse('store:payment_callback')),
     }
     return render(request, 'store/checkout.html', context)
 
