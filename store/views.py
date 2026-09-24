@@ -149,43 +149,48 @@ def checkout(request):
     total_price = cart.get_total_price()
     
     # Initialize Razorpay Client
-    client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
-    
-    # Create order in Razorpay (Amount in paise)
-    razorpay_amount = int(total_price * 100)
-    payment_data = {
-        "amount": razorpay_amount,
-        "currency": "INR",
-        "payment_capture": "1"
-    }
-    
-    razorpay_order = client.order.create(data=payment_data)
-    razorpay_order_id = razorpay_order['id']
-
-    # We will create the Order in the DB here as 'Pending'
-    order = Order.objects.create(
-        user=request.user,
-        total_price=total_price,
-        status='Pending',
-        razorpay_order_id=razorpay_order_id
-    )
-    for item in cart:
-        OrderItem.objects.create(
-            order=order,
-            product=item['product'],
-            price=item['price'],
-            quantity=item['quantity']
-        )
+    try:
+        client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
         
-    context = {
-        'cart': cart,
-        'razorpay_order_id': razorpay_order_id,
-        'razorpay_merchant_key': settings.RAZORPAY_KEY_ID,
-        'razorpay_amount': razorpay_amount,
-        'currency': "INR",
-        'callback_url': request.build_absolute_uri(reverse('store:payment_callback')),
-    }
-    return render(request, 'store/checkout.html', context)
+        # Create order in Razorpay (Amount in paise)
+        razorpay_amount = int(total_price * 100)
+        payment_data = {
+            "amount": razorpay_amount,
+            "currency": "INR",
+            "payment_capture": "1"
+        }
+        
+        razorpay_order = client.order.create(data=payment_data)
+        razorpay_order_id = razorpay_order['id']
+
+        # Create the Order in the DB as 'Pending'
+        order = Order.objects.create(
+            user=request.user,
+            total_price=total_price,
+            status='Pending',
+            razorpay_order_id=razorpay_order_id
+        )
+        for item in cart:
+            OrderItem.objects.create(
+                order=order,
+                product=item['product'],
+                price=item['price'],
+                quantity=item['quantity']
+            )
+            
+        context = {
+            'cart': cart,
+            'razorpay_order_id': razorpay_order_id,
+            'razorpay_merchant_key': settings.RAZORPAY_KEY_ID,
+            'razorpay_amount': razorpay_amount,
+            'currency': "INR",
+            'callback_url': request.build_absolute_uri(reverse('store:payment_callback')),
+        }
+        return render(request, 'store/checkout.html', context)
+
+    except Exception as e:
+        messages.error(request, f"Unable to initialize payment gateway: {str(e)}. Please check your Razorpay API keys.")
+        return redirect('store:cart_detail')
 
 
 @csrf_exempt

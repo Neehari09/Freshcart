@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-load_dotenv(BASE_DIR /'.env')
+load_dotenv(BASE_DIR / '.env', override=True)
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-freshcart-demo-key-change-this-in-production')
@@ -153,5 +153,5 @@ SOCIALACCOUNT_EMAIL_VERIFICATION = 'none'
 LOGIN_REDIRECT_URL = '/'
 
 # Razorpay Settings
-RAZORPAY_KEY_ID = os.environ.get('RAZORPAY_KEY_ID', 'rzp_test_TYjQG27oV1UWm2')
-RAZORPAY_KEY_SECRET = os.environ.get('RAZORPAY_KEY_SECRET', 'Dsx0RPdNUWtnqvqJc3doUlbC') # Please replace this with your actual Key Secret!
+RAZORPAY_KEY_ID = os.environ.get('RAZORPAY_KEY_ID', 'rzp_test_TftjRyyBZnTeQt')
+RAZORPAY_KEY_SECRET = os.environ.get('RAZORPAY_KEY_SECRET', 'hELv5ABTU7EzjiOGMf0IxImH') # Please replace this with your actual Key Secret!
